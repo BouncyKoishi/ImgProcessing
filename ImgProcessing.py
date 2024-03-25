@@ -3,6 +3,7 @@ import random
 import numpy as np
 import math
 
+
 # 随机打乱像素
 def pixelRandomChange(base_image, pic_name):
     width, height = base_image.size
@@ -43,10 +44,18 @@ def pixelMix(left_image, right_image, pic_name):
     new_image.save(pic_name + '.jpg')
 
 
-# 漩涡式旋转图片，离中心越远旋转越多
-def picRotated(base_image, pic_name):
-    new_image = Image.new('RGB', (width, height))
+# 旋转图片
+def picRotated(base_image, pic_name, angle):
     width, height = base_image.size
+    new_image = Image.new('RGB', (width, height))
+    new_image.paste(base_image.rotate(angle), (0, 0))
+    new_image.save(pic_name + '.jpg')
+
+
+# 漩涡式旋转图片，离中心越远旋转越多
+def picRotatedEddies(base_image, pic_name):
+    width, height = base_image.size
+    new_image = Image.new('RGB', (width, height))
     center_x, center_y = width // 2, height // 2
     maxDistance = math.sqrt(center_x ** 2 + center_y ** 2) / 2
 
@@ -186,6 +195,7 @@ def blockRandomInsert(base_image, insert_image, pic_name):
 
 # 保存三通道图片（保留本通道颜色，其他通道置0）
 def decompose_rgb_image(base_array, pic_name):
+    width, height = image.size
     image_r_display = Image.new('RGB', (width, height))
     image_r_display.putdata([(x, 0, 0) for x in base_array[:, :, 0].flatten()])
     image_r_display.save(pic_name + '_r.jpg')
@@ -283,19 +293,6 @@ def canny_edge_detection(base_array, pic_name):
 
 
 if __name__ == '__main__':
-    image = Image.open('image/shushu.jpg')
-    image_array = np.array(image)
-    width, height = image.size
-    # decompose_rgb_image(image_array, 'shushu')
-    # save_r_filter_image(image_array, image_array, 'shushu')
-    # fft_filter_image_rgb(image_array, 'shushu')
-    # fft_filter_image_gray(image_array, 'shushu')
-    # laplacian_edge_detection(image_array, 'shushu')
-    # canny_edge_detection(image_array, 'shushu')
-    # pixelRandomChange(image, 'shushu')
-    # pixelRandomInsert(image, image, 'shushu')
-    # pixelMix(image, image, 'shushu')
-    # blockRepeat(image, 'shushu')
-    # blockRandomChange(image, 'shushu')
-    # blockRandomInsert(image, image, 'shushu')
-    progressively_randomize(image)
+    image = Image.open('image/you1.jpg')
+    # image_array = np.array(image)
+    picRotated(image, 'you1_rotated', -45)
